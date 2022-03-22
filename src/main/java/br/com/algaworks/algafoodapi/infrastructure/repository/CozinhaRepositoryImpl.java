@@ -23,7 +23,7 @@ public class CozinhaRepositoryImpl implements CozinhaRepository {
 
     @Override
     public Cozinha buscar(Long id) {
-        return null;
+        return entityManager.find(Cozinha.class, id);
     }
 
     @Override

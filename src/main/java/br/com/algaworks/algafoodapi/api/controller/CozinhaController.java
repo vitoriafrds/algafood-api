@@ -1,17 +1,22 @@
 package br.com.algaworks.algafoodapi.api.controller;
 
 import br.com.algaworks.algafoodapi.api.mapper.CozinhaMapper;
+import br.com.algaworks.algafoodapi.api.model.CozinhasXMLWrapper;
 import br.com.algaworks.algafoodapi.api.response.CozinhaDTO;
 import br.com.algaworks.algafoodapi.domain.repository.CozinhaRepository;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_XML_VALUE;
+
 @RestController
-@RequestMapping("/cozinhas")
+@RequestMapping(value = "/cozinhas")
 public class CozinhaController {
 
     private CozinhaRepository cozinhaRepository;
@@ -22,8 +27,18 @@ public class CozinhaController {
         this.mapper = CozinhaMapper.getInstance();
     }
 
-    @GetMapping
-    private List<CozinhaDTO> listar() {
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    public List<CozinhaDTO> listarJson() {
         return mapper.map(cozinhaRepository.listar());
+    }
+
+    @GetMapping(produces = APPLICATION_XML_VALUE)
+    public CozinhasXMLWrapper listarXML() {
+        return new CozinhasXMLWrapper(mapper.map(cozinhaRepository.listar()));
+    }
+
+    @GetMapping("/{id}")
+    public CozinhaDTO consultar(@PathVariable long id) {
+        return mapper.toDTO(cozinhaRepository.buscar(id));
     }
 }

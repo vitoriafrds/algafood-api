@@ -19,6 +19,7 @@
 		<java.version>12</java.version>
 		<mapstruct.version>1.4.2.Final</mapstruct.version>
 		<myql.version>8.0.28</myql.version>
+		<jacskon.version>2.13.2</jacskon.version>
 	</properties>
 
 	<dependencies>
@@ -29,6 +30,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
+			<version>${jacskon.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>

@@ -14,4 +14,5 @@ public interface CozinhaMapper {
     }
 
     List<CozinhaDTO> map(List<Cozinha> cozinha);
+    CozinhaDTO toDTO(Cozinha cozinha);
 }
