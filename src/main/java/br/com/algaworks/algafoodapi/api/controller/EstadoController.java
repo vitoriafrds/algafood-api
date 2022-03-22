@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.persistence.GeneratedValue;
 import java.util.List;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @RestController
-@RequestMapping("/estados")
+@RequestMapping(value = "/estados", produces = APPLICATION_JSON_VALUE)
 public class EstadoController {
 
     private EstadoRepository repository;
