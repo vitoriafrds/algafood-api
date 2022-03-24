@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Component
@@ -27,7 +28,29 @@ public class CozinhaRepositoryImpl implements CozinhaRepository {
     }
 
     @Override
-    public void salvar(Cozinha cozinha) {
-
+    @Transactional
+    public Cozinha salvar(Cozinha cozinha) {
+       return entityManager.merge(cozinha);
     }
+
+    @Override
+    @Transactional
+    public Cozinha atualizar(long id, Cozinha alteracao) {
+        Cozinha cozinha = buscar(id);
+
+        if (cozinha != null) {
+            cozinha.setTipo(alteracao.getTipo());
+            return salvar(cozinha);
+        }
+
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public void remover(Cozinha cozinha) {
+        entityManager.remove(cozinha);
+    }
+
+
 }
