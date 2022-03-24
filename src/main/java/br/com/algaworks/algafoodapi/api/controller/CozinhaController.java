@@ -3,6 +3,7 @@ package br.com.algaworks.algafoodapi.api.controller;
 import br.com.algaworks.algafoodapi.api.mapper.CozinhaMapper;
 import br.com.algaworks.algafoodapi.api.model.CozinhasXMLWrapper;
 import br.com.algaworks.algafoodapi.api.response.CozinhaDTO;
+import br.com.algaworks.algafoodapi.domain.model.Cozinha;
 import br.com.algaworks.algafoodapi.domain.repository.CozinhaRepository;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,13 @@ public class CozinhaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CozinhaDTO> consultar(@PathVariable long id) {
-        return ResponseEntity.ok(mapper.toDTO(cozinhaRepository.buscar(id)));
+
+        Cozinha cozinha = cozinhaRepository.buscar(id);
+
+        if (cozinha != null) {
+            return ResponseEntity.ok(mapper.toDTO(cozinhaRepository.buscar(id)));
+        }
+
+        return ResponseEntity.notFound().build();
     }
 }
