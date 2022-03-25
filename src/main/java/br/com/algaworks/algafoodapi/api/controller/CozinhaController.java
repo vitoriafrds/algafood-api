@@ -1,83 +1,81 @@
 package br.com.algaworks.algafoodapi.api.controller;
 
 import br.com.algaworks.algafoodapi.api.mapper.CozinhaMapper;
-import br.com.algaworks.algafoodapi.api.model.CozinhasXMLWrapper;
 import br.com.algaworks.algafoodapi.api.response.CozinhaDTO;
 import br.com.algaworks.algafoodapi.domain.model.Cozinha;
-import br.com.algaworks.algafoodapi.domain.repository.CozinhaRepository;
-import org.springframework.beans.BeanUtils;
+import br.com.algaworks.algafoodapi.domain.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.http.MediaType.APPLICATION_XML_VALUE;
 
 @RestController
 @RequestMapping(value = "/cozinhas")
 public class CozinhaController {
 
-    private CozinhaRepository cozinhaRepository;
+    private CadastroCozinhaService cadastroCozinhaService;
+    private ListagemCozinhasService listagemCozinhasService;
+    private ConsultaCozinhaService consultaCozinhaService;
+    private AlteracaoCozinhaService alteracaoService;
+    private ExclusaoCozinhaService exclusaoService;
     private CozinhaMapper mapper;
 
-    public CozinhaController(CozinhaRepository repository) {
-        this.cozinhaRepository = repository;
+    @Autowired
+    public CozinhaController(CadastroCozinhaService cadastroService,
+                             ListagemCozinhasService listagemService,
+                             ConsultaCozinhaService consultaService,
+                             AlteracaoCozinhaService alteracaoService,
+                             ExclusaoCozinhaService exclusaoService) {
+        this.cadastroCozinhaService = cadastroService;
+        this.listagemCozinhasService = listagemService;
+        this.consultaCozinhaService = consultaService;
+        this.alteracaoService = alteracaoService;
+        this.exclusaoService = exclusaoService;
         this.mapper = CozinhaMapper.getInstance();
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<CozinhaDTO>> listarJson() {
-        return ResponseEntity.ok(mapper.map(cozinhaRepository.listar()));
-    }
-
-    @GetMapping(produces = APPLICATION_XML_VALUE)
-    public ResponseEntity<CozinhasXMLWrapper> listarXML() {
-        return ResponseEntity.ok(new CozinhasXMLWrapper(mapper.map(cozinhaRepository.listar())));
+    public ResponseEntity<List<CozinhaDTO>> listar() {
+        return ResponseEntity.ok(listagemCozinhasService.listar());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CozinhaDTO> consultar(@PathVariable long id) {
+        Optional<CozinhaDTO> cozinha = consultaCozinhaService.consultar(id);
 
-        Cozinha cozinha = cozinhaRepository.buscar(id);
-
-        if (cozinha != null) {
-            return ResponseEntity.ok(mapper.toDTO(cozinhaRepository.buscar(id)));
-        }
-
-        return ResponseEntity.notFound().build();
+        return cozinha.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public CozinhaDTO salvar(@RequestBody CozinhaDTO cozinha) {
-        Cozinha cozinhaRegistrada = cozinhaRepository.salvar(mapper.toModel(cozinha));
-        return mapper.toDTO(cozinhaRegistrada);
+    public Optional<CozinhaDTO> salvar(@RequestBody CozinhaDTO cozinha) {
+        return cadastroCozinhaService.cadastrar(cozinha);
     }
 
     @PutMapping("/{cozinhaId}")
     public ResponseEntity<CozinhaDTO> atualizar(@PathVariable long cozinhaId, @RequestBody CozinhaDTO alteracao) {
-        Cozinha cozinha = cozinhaRepository.atualizar(cozinhaId, mapper.toModel(alteracao));
+        Optional<CozinhaDTO> cozinha = alteracaoService.alterar(cozinhaId, alteracao);
 
-        if (cozinha != null) {
-            return ResponseEntity.ok(mapper.toDTO(cozinha));
-        }
+        return cozinha.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
 
-        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{cozinhaId}")
     public ResponseEntity<Void> excluir(@PathVariable long cozinhaId) {
-        Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
+        Optional<CozinhaDTO> cozinha = consultaCozinhaService.consultar(cozinhaId);
 
-        if (cozinha != null) {
-            cozinhaRepository.remover(cozinha);
+        if (cozinha.isPresent()) {
+            exclusaoService.excluir(mapper.toModel(cozinha.get()));
             return ResponseEntity.noContent().build();
         }
 
         return ResponseEntity.notFound().build();
-
     }
 }
