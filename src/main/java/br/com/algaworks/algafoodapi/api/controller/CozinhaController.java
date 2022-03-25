@@ -2,7 +2,9 @@ package br.com.algaworks.algafoodapi.api.controller;
 
 import br.com.algaworks.algafoodapi.api.mapper.CozinhaMapper;
 import br.com.algaworks.algafoodapi.api.response.CozinhaDTO;
-import br.com.algaworks.algafoodapi.domain.service.*;
+import br.com.algaworks.algafoodapi.domain.exceptions.EntidadeEmUsoException;
+import br.com.algaworks.algafoodapi.domain.exceptions.EntidadeNaoEncontradaException;
+import br.com.algaworks.algafoodapi.domain.service.CadastroCozinhaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -55,13 +58,15 @@ public class CozinhaController {
 
     @DeleteMapping("/{cozinhaId}")
     public ResponseEntity<Void> excluir(@PathVariable long cozinhaId) {
-        Optional<CozinhaDTO> cozinha = cadastroService.consultar(cozinhaId);
-
-        if (cozinha.isPresent()) {
+        try {
             cadastroService.excluir(cozinhaId);
             return ResponseEntity.noContent().build();
-        }
 
-        return ResponseEntity.notFound().build();
+        } catch (EntidadeEmUsoException err) {
+            return ResponseEntity.status(CONFLICT).build();
+
+        } catch (EntidadeNaoEncontradaException err) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
