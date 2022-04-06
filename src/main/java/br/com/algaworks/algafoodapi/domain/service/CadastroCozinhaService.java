@@ -1,6 +1,6 @@
 package br.com.algaworks.algafoodapi.domain.service;
 
-import br.com.algaworks.algafoodapi.api.mapper.CozinhaMapper;
+import br.com.algaworks.algafoodapi.domain.mapper.CozinhaMapper;
 import br.com.algaworks.algafoodapi.api.response.CozinhaDTO;
 import br.com.algaworks.algafoodapi.domain.exceptions.EntidadeEmUsoException;
 import br.com.algaworks.algafoodapi.domain.exceptions.EntidadeNaoEncontradaException;

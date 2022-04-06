@@ -1,4 +1,4 @@
-package br.com.algaworks.algafoodapi.api.mapper;
+package br.com.algaworks.algafoodapi.domain.mapper;
 
 import br.com.algaworks.algafoodapi.api.response.EstadoDTO;
 import br.com.algaworks.algafoodapi.domain.model.Estado;
