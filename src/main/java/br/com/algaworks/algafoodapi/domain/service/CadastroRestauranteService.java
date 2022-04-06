@@ -25,4 +25,10 @@ public class CadastroRestauranteService {
         Optional<Restaurante> restaurante = restauranteRepository.findById(id);
         return restaurante.map(value -> mapper.toRepresentationModel(value));
     }
+
+    public RestauranteDTO cadastrar(RestauranteDTO restaurante) {
+        Restaurante novoRestaurante = restauranteRepository.save(mapper.toModel(restaurante));
+
+        return mapper.toRepresentationModel(novoRestaurante);
+    }
 }

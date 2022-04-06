@@ -14,4 +14,6 @@ public class RestauranteDTO {
 
     @JsonProperty("taxa_frete")
     private BigDecimal taxaFrete;
+
+    private CozinhaDTO cozinha;
 }

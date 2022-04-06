@@ -17,4 +17,6 @@ public interface RestauranteMapper {
 
      RestauranteDTO toRepresentationModel(Restaurante entity);
      List<RestauranteDTO> toRepresentationModel(List<Restaurante> entity);
+
+     Restaurante toModel(RestauranteDTO restaurante);
 }
