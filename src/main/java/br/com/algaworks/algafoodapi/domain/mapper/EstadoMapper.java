@@ -15,4 +15,6 @@ public interface EstadoMapper {
 
     List<EstadoDTO> map(List<Estado> estados);
     EstadoDTO map(Estado estado);
+
+    Estado map(EstadoDTO estado);
 }
