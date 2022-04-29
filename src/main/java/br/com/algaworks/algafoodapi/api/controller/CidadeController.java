@@ -38,4 +38,5 @@ public class CidadeController {
     public Optional<CidadeDTO> salvar(@RequestBody CidadeDTO cozinha) {
         return cidadeService.cadastrar(cozinha);
     }
+
 }

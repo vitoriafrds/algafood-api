@@ -1,0 +1,110 @@
+MODELAGEM DAS APIS
+
+GET /cozinhas HTTP/1.1
+
+GET /cozinhas/{id} HTTP/1.1
+
+POST /cozinhas HTTP/1.1
+Content-Type: application/json
+Request Body:
+{
+    "tipo":"Italiana"
+}
+
+PUT /cozinhas/{id} HTTP/1.1
+Content-Type: application/json
+Request Body:
+{
+    "tipo":"Argentina"
+}
+
+DELETE /cozinhas/{id} HTTP/1.1
+HTTP Status em caso de sucesso: 204
+HTTP Status em caso de erro: 409 conflict
+
+GET /restaurantes
+Content-Type: application/json
+Response Body:
+[
+    {
+      "id":1,
+      "nome":"Just Burguer",
+      "taxa_frete":10.00
+    }
+]
+HTTP Status em caso de sucesso: 200
+
+GET /restaurantes/{id}
+Content-Type: application/json
+Response Body:
+{
+  "id":1,
+  "nome":"Just Burguer",
+  "taxa_frete":10.00
+}
+
+HTTP Status em caso de sucesso: 200
+HTTP Status em caso de recurso não encontrado: 404
+
+
+PUT - /restaurantes/{id}
+Content-Type: application/json
+Request Body:
+
+{
+  "nome" : "Comida Mineira",
+  "taxaFrete" : 10.00,
+  "cozinha" : {
+      "id" : 1
+  }
+}
+
+Response Body:
+200 - OK
+400 - Bad Request
+Descrição do problema
+404 - Not Found
+
+
+GET - /estados
+Content-Type: application/json
+Response Body:
+
+[
+  {
+    "id" : 1,
+    "nome" : "São Paulo"
+  },
+  {
+    "id" : 2,
+    "nome" : "Rio de Janeiro"
+  }
+]
+
+POST - /estados
+Content-Type: application/json
+Request Body:
+{
+  "nome" : "Rio de Janeiro"
+}
+
+GET - /estados/{id}
+
+Content-Type: application/json
+Response Body:
+{
+  "id" : 1,
+  "nome" : "São Paulo"
+},
+
+GET - /cidades
+Content-Type: application/json
+Request Body:
+{
+  "id" : 1,
+  "nome" : "Campinas",
+  "estado" : {
+    "id" : 1,
+    "nome" : "São Paulo"
+  }
+}
