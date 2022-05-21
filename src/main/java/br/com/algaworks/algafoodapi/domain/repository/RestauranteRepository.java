@@ -2,15 +2,17 @@ package br.com.algaworks.algafoodapi.domain.repository;
 
 import br.com.algaworks.algafoodapi.domain.model.Restaurante;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.List;
- import java.util.Optional;
+import java.util.Optional;
 
 @Repository
 public interface RestauranteRepository
-        extends JpaRepository<Restaurante, Long>, RestauranteRepositoryCustom {
+        extends JpaRepository<Restaurante, Long>,
+        RestauranteRepositoryCustom, JpaSpecificationExecutor<Restaurante> {
 
     List<Restaurante> findByTaxaFreteBetween(BigDecimal taxaInicial, BigDecimal taxaFinal);
     Optional<Restaurante> findFirstByNomeContaining(String nome);

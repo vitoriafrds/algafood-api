@@ -30,7 +30,7 @@ public class RestauranteRepositoryCustomImpl implements RestauranteRepositoryCus
         Predicate nomePredicado = builder.like(root.get("nome"), "%" + nome + "%");
         criteriaQuery.where(nomePredicado);
 
-        
+
         TypedQuery<Restaurante> result = manager.createQuery(criteriaQuery);
         return result.getResultList();
     }
